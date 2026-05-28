@@ -19,102 +19,71 @@ function AuthPage() {
 
   const navigate = useNavigate();
 
-  const isRegister = mode === "register";
+const isRegister = mode === "register";
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  const endpoint =
+    mode === "register"
+      ? `${import.meta.env.VITE_API_URL}/register`
+      : `${import.meta.env.VITE_API_URL}/login`;
 
-    const endpoint =
-      mode === "register"
-        ? `${import.meta.env.VITE_API_URL}/register`
-        : `${import.meta.env.VITE_API_URL}/login`;
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(
+        mode === "register"
+          ? {
+              name,
+              email,
+              password,
+            }
+          : {
+              email,
+              password,
+            }
+      ),
+    });
 
-    try {
+    const data = await res.json();
 
-      const res = await fetch(endpoint, {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(
-          mode === "register"
-            ? {
-                name,
-                email,
-                password,
-              }
-            : {
-                email,
-                password,
-              }
-        ),
-      });
-
-      const data = await res.json();
-
-// STEP 1: check if request failed FIRST
-if (!res.ok) {
-  alert(data.error || "Something went wrong");
-  return;
-}
-
-// STEP 2: ONLY if login is successful
-if (mode === "login") {
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("user", JSON.stringify(data.user));
-
-  alert("Login successful");
-  navigate("/dashboard");;
-} else {
-  alert("Account created successfully");
-
-  setMode("login");
-  setName("");
-  setEmail("");
-  setPassword("");
-}
-
-      // LOGIN
-      if (mode === "login") {
-
-  localStorage.setItem(
-    "token",
-    data.token
-  );
-
-  localStorage.setItem(
-    "user",
-    JSON.stringify(data.user)
-  );
-
-  alert("Login successful");
-
-  navigate("/");
-}
-
-      // REGISTER
-      else {
-
-        alert("Account created successfully");
-
-        setMode("login");
-
-        setName("");
-        setEmail("");
-        setPassword("");
-      }
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert("Server error");
+    // STEP 1: check if request failed FIRST
+    if (!res.ok) {
+      alert(data.error || "Something went wrong");
+      return;
     }
-  };
+
+    // STEP 2: REGISTER SUCCESS
+    if (mode === "register") {
+      alert("Account created successfully");
+
+      setMode("login");
+      setName("");
+      setEmail("");
+      setPassword("");
+
+      return;
+    }
+
+    // STEP 3: LOGIN SUCCESS
+    if (mode === "login") {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      alert("Login successful");
+
+      navigate("/dashboard");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+};
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#f5f3ff] via-[#eef2ff] to-[#e0f2fe] flex items-center justify-center px-4 py-12">
