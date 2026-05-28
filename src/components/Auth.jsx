@@ -68,7 +68,7 @@ if (mode === "login") {
   localStorage.setItem("user", JSON.stringify(data.user));
 
   alert("Login successful");
-  navigate("/");
+  navigate("/dashboard");;
 } else {
   alert("Account created successfully");
 

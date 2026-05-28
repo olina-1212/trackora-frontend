@@ -6,42 +6,22 @@ import Applications from "./components/applications";
 import Auth from "./components/Auth";
 
 function App() {
-
   return (
-
     <Routes>
 
-      {/* HOME / DASHBOARD */}
+      {/* LOGIN PAGE (START HERE) */}
+      <Route path="/" element={<Auth />} />
+      <Route path="/auth" element={<Auth />} />
 
-      <Route
-        path="/"
-        element={<Dashboard />}
-      />
+      {/* DASHBOARD */}
+      <Route path="/dashboard" element={<Dashboard />} />
 
-      {/* PREPARATION PAGE */}
-
-      <Route
-        path="/preparation"
-        element={<AddProblem />}
-      />
-
-      {/* APPLICATIONS PAGE */}
-
-      <Route
-        path="/applications"
-        element={<Applications />}
-      />
-
-      <Route
-        path="/auth"
-        element={<Auth />}
-      />
-
+      {/* OTHER PAGES */}
+      <Route path="/preparation" element={<AddProblem />} />
+      <Route path="/applications" element={<Applications />} />
 
     </Routes>
-
   );
-
 }
 
 export default App;
