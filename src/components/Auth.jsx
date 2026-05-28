@@ -56,15 +56,27 @@ function AuthPage() {
 
       const data = await res.json();
 
-      localStorage.setItem("token", data.token);
-localStorage.setItem("user", JSON.stringify(data.user));
+// STEP 1: check if request failed FIRST
+if (!res.ok) {
+  alert(data.error || "Something went wrong");
+  return;
+}
 
-      if (!res.ok) {
+// STEP 2: ONLY if login is successful
+if (mode === "login") {
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
 
-        alert(data.error || "Something went wrong");
+  alert("Login successful");
+  navigate("/");
+} else {
+  alert("Account created successfully");
 
-        return;
-      }
+  setMode("login");
+  setName("");
+  setEmail("");
+  setPassword("");
+}
 
       // LOGIN
       if (mode === "login") {
