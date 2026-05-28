@@ -337,7 +337,7 @@ const diffBuckets = [
   {/* RIGHT */}
 
   <Link
-    to="/"
+    to="/dashboard"
     className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-all font-medium"
   >
     <ArrowLeft size={18} />
